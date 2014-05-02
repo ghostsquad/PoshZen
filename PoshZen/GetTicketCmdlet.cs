@@ -1,29 +1,41 @@
 ﻿namespace PoshZen
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Management.Automation;
-    using System.Text;
-    using System.Threading.Tasks;
+
     using SharpZendeskApi.Core;
+    using SharpZendeskApi.Core.Management;
 
     [Cmdlet("Get", "Ticket")]
     public class GetTicketCmdlet : Cmdlet
     {
-        protected override void EndProcessing()
+        #region Fields
+
+        private TicketManager manager;
+
+        #endregion
+
+        #region Public Properties
+
+        [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true)]
+        public IZendeskClient Client { get; set; }
+
+        [Parameter(Position = 1, Mandatory = true)]
+        public int Id { get; set; }
+
+        #endregion
+
+        #region Methods
+
+        protected override void BeginProcessing()
         {
-            base.EndProcessing();
+            this.manager = new TicketManager(this.Client);
         }
 
         protected override void ProcessRecord()
         {
-            base.ProcessRecord();            
+            this.WriteObject(this.manager.Get(this.Id));
         }
 
-        protected override void BeginProcessing()
-        {
-            base.BeginProcessing();
-        }
+        #endregion
     }
 }
