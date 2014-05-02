@@ -1,0 +1,9 @@
+<StyleCopSettings Version="105">
+  <Analyzers>
+    <Analyzer AnalyzerId="StyleCopPlus.StyleCopPlusRules">
+      <AnalyzerSettings>
+        <StringProperty Name="SP2001_Mode">Spaces:False</StringProperty>
+      </AnalyzerSettings>
+    </Analyzer>
+  </Analyzers>
+</StyleCopSettings>
