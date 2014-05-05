@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.IO;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;   
@@ -11,33 +12,28 @@
 
     using FluentAssertions;
 
+    using PoshZen.Exceptions;
+
     using Xunit;
 
     public class GetTicketCmdletTests
     {
         private RunspaceConfiguration config;
 
-        public GetTicketCmdletTests()
+        [Fact]
+        public void ShouldCreateCmdLet()
         {
-            config = RunspaceConfiguration.Create();
-            config.Cmdlets.Append(new CmdletConfigurationEntry(
-                "Get-MSIFileHash",
-                typeof(GetTicketCmdlet),
-                "Microsoft.Windows.Installer.PowerShell.dll-Help.xml"));
+            var cmd = new GetTicketCmdlet();
+            cmd.Should().BeAssignableTo<Cmdlet>();
         }
 
         [Fact]
-        public void CanGetTicket()
+        public void WhenClientNotProvidedExpectPoshZenException()
         {
-            using (Runspace rs = RunspaceFactory.CreateRunspace(config))
-            {
-                rs.Open();
-                using (Pipeline p = rs.CreatePipeline(@"get-ticket -Client example.txt"))
-                {
-                    Collection<PSObject> objs = p.Invoke();
-                    objs.Count.Should().Be(1);
-                }
-            }
+            var cmd = new GetTicketCmdlet { Id = 1 };
+            var cmdEnumerator = cmd.Invoke().GetEnumerator();
+
+            cmdEnumerator.Invoking(x => x.MoveNext()).ShouldThrow<PoshZenException>();
         }
     }
 }

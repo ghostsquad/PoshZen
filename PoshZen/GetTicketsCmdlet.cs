@@ -11,8 +11,8 @@
     using SharpZendeskApi.Core.Management;
     using SharpZendeskApi.Core.Models;
 
-    [Cmdlet("Get", "Tickets")]
-    public class GetTicketsCmdlet : Cmdlet
+    [Cmdlet(VerbsCommon.Get, "Tickets")]
+    public class GetTicketsCmdlet : PoshZenCmdletBase
     {
 
         #region Fields
@@ -21,21 +21,19 @@
 
         #endregion
 
-        #region Public Properties
+        #region Public Properties      
 
-        [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true, ParameterSetName = "Ids")]
-        [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true, ParameterSetName = "FromViewId")]
-        [Parameter(Position = 0, Mandatory = true, ValueFromPipeline = true, ParameterSetName = "FromView")]
-        public IZendeskClient Client { get; set; }
-
-        [Parameter(Position = 1, Mandatory = true, ParameterSetName = "Ids")]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = "Ids")]
         public int[] Ids { get; set; }
 
-        [Parameter(Position = 1, Mandatory = true, ParameterSetName = "FromViewId")]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = "FromViewId")]
         public int? ViewId { get; set; }
 
-        [Parameter(Position = 1, Mandatory = true, ParameterSetName = "FromView")]
+        [Parameter(Position = 0, Mandatory = true, ParameterSetName = "FromView")]
         public View View { get; set; }
+
+        [Parameter(Position = 1, Mandatory = false)]
+        public override IZendeskClient Client { get; set; }
 
         #endregion
 
