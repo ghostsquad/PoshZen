@@ -32,4 +32,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="Build" />
+  <Target Name="Test" DependsOnTargets="Build">
+	<Message Text='Running Pester' />
+	<Exec Command="cmd /c $(MSBuildProjectDirectory)\Pester\bin\pester.bat" />
+  </Target>
 </Project>
