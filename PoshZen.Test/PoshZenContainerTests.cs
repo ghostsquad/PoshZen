@@ -35,10 +35,10 @@
                 {
                     actualPathToSaveTo = x; 
                     actualSettings = y;                                   
-                });            
+                });
 
-            var container = new PoshZenContainer(environmentMock.Object, null);
-            container.WriteJsonSettings(this.containerFixture.Settings);
+            var poshZenContainer = PoshZenContainer.Create(environmentMock.Object, null);
+            poshZenContainer.WriteJsonSettings(this.containerFixture.Settings);
 
             actualSettings.Should().Be(this.containerFixture.ExpectedSettings);
             actualPathToSaveTo.Should().Be(@"PoshZen\RegisteredAccounts.json");
@@ -54,17 +54,17 @@
 
             var expectedPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"PoshZen\RegisteredAccounts.json");
 
-            var container = new PoshZenContainer(environmentMock.Object, null);
+            var poshZenContainer = PoshZenContainer.Create(environmentMock.Object, null);
 
 
             environmentMock.Verify(x => x.FileExists(expectedPath), Times.Once());
             environmentMock.Verify(x => x.ReadFile(expectedPath), Times.Once());
 
-            container.Settings.CredentialType.Should().Be(this.containerFixture.Settings.CredentialType);
-            container.Settings.DisplayName.Should().Be(this.containerFixture.Settings.DisplayName);
-            container.Settings.Domain.Should().Be(this.containerFixture.Settings.Domain);
-            container.Settings.ZendeskUser.Should().Be(this.containerFixture.Settings.ZendeskUser);
-            container.Settings.ZendeskSecret.Should().Be(this.containerFixture.Settings.ZendeskSecret);
+            poshZenContainer.Settings.CredentialType.Should().Be(this.containerFixture.Settings.CredentialType);
+            poshZenContainer.Settings.DisplayName.Should().Be(this.containerFixture.Settings.DisplayName);
+            poshZenContainer.Settings.Domain.Should().Be(this.containerFixture.Settings.Domain);
+            poshZenContainer.Settings.ZendeskUser.Should().Be(this.containerFixture.Settings.ZendeskUser);
+            poshZenContainer.Settings.ZendeskSecret.Should().Be(this.containerFixture.Settings.ZendeskSecret);
         }
 
         public void SetFixture(ContainerFixture data)
