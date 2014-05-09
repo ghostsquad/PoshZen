@@ -1,21 +1,33 @@
 ﻿namespace PoshZen
-{
-    using System;
+{   
     using System.Management.Automation;
 
-    using SharpZendeskApi.Core;
+    using PoshZen.Exceptions;
 
-    public abstract class PoshZenCmdletBase : Cmdlet
+    using SharpZendeskApi;    
+    using SharpZendeskApi.Management;
+    using SharpZendeskApi.Models;
+
+    public abstract class PoshZenCmdletBase<TInterface> : PSCmdlet
+        where TInterface : IZendeskThing, ITrackable
     {
         #region Public Properties
 
         public abstract IZendeskClient Client { get; set; }
 
+        protected IManager<TInterface> Manager { get; set; }
+
         #endregion
 
         #region Methods
 
-        protected void ThrowIfUnableToObtainClient()
+        internal void ResolveManager()
+        {
+            this.ResolveClient();
+            this.Manager = PoshZenContainer.Default.ResolveManager<TInterface>(this.Client);
+        }
+
+        protected void ResolveClient()
         {
             if (this.Client != null)
             {
@@ -25,7 +37,7 @@
             this.Client = PoshZenContainer.Default.ResolveClient();
             if (this.Client == null)
             {
-                throw new InvalidOperationException("No client specified or obtained from persisted/shell defaults.");
+                throw new PoshZenException("No client specified or obtained from persisted/shell defaults.");
             }
         }
 

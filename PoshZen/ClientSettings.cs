@@ -1,20 +1,20 @@
 ﻿namespace PoshZen
 {
-    using SharpZendeskApi.Core;
+    using SharpZendeskApi;
 
     internal class ClientSettings
     {
         #region Properties
 
-        internal ZendeskAuthenticationMethod CredentialType { get; set; }
+        public ZendeskAuthenticationMethod CredentialType { get; set; }
 
-        internal string DisplayName { get; set; }
+        public string DisplayName { get; set; }
 
-        internal string Domain { get; set; }
+        public string Domain { get; set; }
 
-        internal string ZendeskSecret { get; set; }
+        public string ZendeskSecret { get; set; }
 
-        internal string ZendeskUser { get; set; }
+        public string ZendeskUser { get; set; }
 
         #endregion
     }

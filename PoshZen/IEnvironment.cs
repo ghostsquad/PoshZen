@@ -10,11 +10,13 @@
 
         #region Public Methods and Operators
 
-        void CreateDirectoryIfNotExists(string path);
+        void CreateDirectory(string path);
 
-        string ReadFile(string filepath);
+        string ReadFile(string path);
 
-        void WriteContents(string filepath);
+        void WriteContents(string path, string contents);
+
+        bool FileExists(string path);
 
         #endregion
     }

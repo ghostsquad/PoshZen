@@ -3,13 +3,15 @@
     using System;
     using System.IO;
 
+    using Microsoft.Practices.Unity;
+
     using Newtonsoft.Json;
 
-    using SharpZendeskApi.Core;
-    using SharpZendeskApi.Core.Management;
-    using SharpZendeskApi.Core.Models;
+    using SharpZendeskApi;
+    using SharpZendeskApi.Management;
+    using SharpZendeskApi.Models;   
 
-    internal class PoshZenContainer
+    internal sealed class PoshZenContainer
     {
         #region Static Fields
 
@@ -19,39 +21,33 @@
 
         #endregion
 
-        #region Fields
-
-        private IEnvironment environment;
-
-        private string settingsJsonPath;
-
-        #endregion
-
         #region Constructors and Destructors
 
-        public PoshZenContainer(IEnvironment environment)
+        public PoshZenContainer(IEnvironment environment, IUnityContainer container)
         {
-            this.environment = environment;
+            this.Environment = environment;
+            this.Container = container;
 
             var poshZenAppDataFolder = Path.Combine(environment.ApplicationDataFolder, "PoshZen");
-            environment.CreateDirectoryIfNotExists(poshZenAppDataFolder);
-            this.settingsJsonPath = Path.Combine(poshZenAppDataFolder, "RegisteredAccounts.json");
+            environment.CreateDirectory(poshZenAppDataFolder);
+            this.SettingsJsonPath = Path.Combine(poshZenAppDataFolder, "RegisteredAccounts.json");
 
-            string settingsJson = null;
-
-            if (File.Exists(this.settingsJsonPath))
+            if (!environment.FileExists(this.SettingsJsonPath))
             {
-                settingsJson = environment.ReadFile(this.settingsJsonPath);
+                return;
             }
 
+            string settingsJson = environment.ReadFile(this.SettingsJsonPath);
             if (settingsJson != null)
             {
                 this.Settings = JsonConvert.DeserializeObject<ClientSettings>(settingsJson);
             }
             else
             {
-                throw new InvalidOperationException(this.settingsJsonPath + " file is corrupt!");
+                throw new InvalidOperationException(this.SettingsJsonPath + " file is corrupt!");
             }
+
+            instance = this;
         }
 
         #endregion
@@ -62,15 +58,22 @@
         {
             get
             {
-                if (instance == null)
+                if (instance != null)
                 {
-                    lock (syncRoot)
+                    return instance;
+                }
+
+                lock (syncRoot)
+                {
+                    if (instance != null)
                     {
-                        if (instance == null)
-                        {
-                            instance = new PoshZenContainer(WindowsEnvironment.Default);
-                        }
+                        return instance;
                     }
+
+                    var container = new UnityContainer();
+                    container.RegisterType(typeof(TicketManager));
+
+                    instance = new PoshZenContainer(WindowsEnvironment.Default, container);
                 }
 
                 return instance;
@@ -79,7 +82,13 @@
 
         public IZendeskClient Client { get; set; }
 
+        public IUnityContainer Container { get; private set; }
+
+        public IEnvironment Environment { get; private set; }
+
         public ClientSettings Settings { get; set; }
+
+        public string SettingsJsonPath { get; set; }
 
         #endregion
 
@@ -87,25 +96,38 @@
 
         public IZendeskClient ResolveClient()
         {
-            return this.Client
-                   ?? (this.Client =
+            if (this.Client != null)
+            {
+                return this.Client;
+            }
+
+            if (this.Settings == null)
+            {
+                return null;
+            }
+
+            return this.Client =
                        new ZendeskClient(
                            this.Settings.Domain, 
                            this.Settings.ZendeskUser.Unprotect(), 
                            this.Settings.ZendeskSecret.Unprotect(), 
-                           this.Settings.CredentialType));
+                           this.Settings.CredentialType);
         }
 
-        public IManager<ITicket> ResolveTicketManager()
+        public IManager<TInterface> ResolveManager<TInterface>(IZendeskClient client)
+            where TInterface : IZendeskThing, ITrackable
         {
-            return new TicketManager(this.Client);
+
+            return this.Container.Resolve<IManager<TInterface>>(new ResolverOverride[] { new ParameterOverride("client", client) });            
         }
 
         public void WriteJsonSettings(ClientSettings settings)
         {
             this.Settings = settings;
-            var serializedSettings = JsonConvert.SerializeObject(this.Settings);
-            this.environment.WriteContents(serializedSettings);
+            var serializedSettings = JsonConvert.SerializeObject(
+                this.Settings, 
+                new JsonSerializerSettings { Formatting = Formatting.Indented });
+            this.Environment.WriteContents(this.SettingsJsonPath, serializedSettings);
         }
 
         #endregion

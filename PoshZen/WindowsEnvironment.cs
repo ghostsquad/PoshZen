@@ -1,6 +1,7 @@
 ﻿namespace PoshZen
 {
     using System;
+    using System.IO;
 
     internal class WindowsEnvironment : IEnvironment
     {
@@ -53,19 +54,24 @@
 
         #region Public Methods and Operators
 
-        public void CreateDirectoryIfNotExists(string path)
+        public void CreateDirectory(string path)
         {
-            throw new NotImplementedException();
+            Directory.CreateDirectory(path);
         }
 
-        public string ReadFile(string filepath)
+        public bool FileExists(string path)
         {
-            throw new NotImplementedException();
+            return File.Exists(path);
         }
 
-        public void WriteContents(string filepath)
+        public string ReadFile(string path)
         {
-            throw new NotImplementedException();
+            return File.ReadAllText(path);
+        }
+
+        public void WriteContents(string path, string contents)
+        {
+            File.WriteAllText(path, contents);
         }
 
         #endregion

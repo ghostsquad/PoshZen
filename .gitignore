@@ -74,6 +74,9 @@ ipch/
 _ReSharper*/
 *.[Rr]e[Ss]harper
 
+# Stylecop Cache
+StyleCop.Cache
+
 # TeamCity is a build add-in
 _TeamCity*
 

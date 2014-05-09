@@ -1,39 +1,54 @@
 ﻿namespace PoshZen.Test
 {
     using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;   
-    using System.Management.Automation;
-    using System.Management.Automation.Runspaces;
 
     using FluentAssertions;
 
-    using PoshZen.Exceptions;
+    using Microsoft.Practices.Unity;
+
+    using Moq;
+
+    using Ploeh.AutoFixture;
+
+    using SharpZendeskApi;
+    using SharpZendeskApi.Management;
+    using SharpZendeskApi.Models;   
 
     using Xunit;
 
-    public class GetTicketCmdletTests
+    public class GetTicketCmdletTests : ScriptCsCmdletTestBase, IUseFixture<ManagementFixture>
     {
-        private RunspaceConfiguration config;
+        private readonly Mock<IEnvironment> environmentMock = new Mock<IEnvironment>();
 
+        private ManagementFixture managementFixture;
+        
         [Fact]
-        public void ShouldCreateCmdLet()
+        public void CanGetTicket()
         {
-            var cmd = new GetTicketCmdlet();
-            cmd.Should().BeAssignableTo<Cmdlet>();
+            var expectedTicket = this.managementFixture.Fixture.Create<ITicket>();
+
+            this.environmentMock.Setup(x => x.ApplicationDataFolder).Returns(AppDomain.CurrentDomain.BaseDirectory);
+
+            int? actualId;
+            var managerMock = new Mock<IManager<ITicket>>();
+            managerMock.Setup(x => x.Get(It.IsAny<int>()))
+                .Returns(expectedTicket)
+                .Callback<int>(x => actualId = x);            
+
+            this.managementFixture.UnityContainer.RegisterInstance(managerMock.Object);
+
+            new PoshZenContainer(this.environmentMock.Object, this.managementFixture.UnityContainer);
+            PoshZenContainer.Default.Client = Mock.Of<IZendeskClient>();
+
+            var invocationData = Invoke("Get-Ticket 1");
+
+            invocationData.Results.Should().HaveCount(1);
+            invocationData.Results[0].BaseObject.Should().Be(expectedTicket);
         }
 
-        [Fact]
-        public void WhenClientNotProvidedExpectPoshZenException()
+        public void SetFixture(ManagementFixture data)
         {
-            var cmd = new GetTicketCmdlet { Id = 1 };
-            var cmdEnumerator = cmd.Invoke().GetEnumerator();
-
-            cmdEnumerator.Invoking(x => x.MoveNext()).ShouldThrow<PoshZenException>();
+            this.managementFixture = data;
         }
     }
 }
