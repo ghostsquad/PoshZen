@@ -46,7 +46,7 @@
         {
             get
             {
-                return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             }
         }
 

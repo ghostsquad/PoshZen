@@ -4,6 +4,7 @@
     using System.Runtime.InteropServices;
     using System.Security;
     using System.Security.Cryptography;
+    using System.Text;
 
     // http://msdn.microsoft.com/en-us/library/system.security.cryptography.protecteddata.aspx
     internal static class DataProtectionExtensions
@@ -12,23 +13,31 @@
 
         private static readonly byte[] AdditionalEntropy = { 9, 3, 9, 5, 0, 4, 1, 9, 5, 4, 3, 9, 7, 6, 9 };
 
+        private static readonly Encoding Encoding = Encoding.Unicode;
+
         #endregion
 
         #region Public Methods and Operators
 
         public static string Protect(this string secret)
         {
-            var bytes = ProtectedData.Protect(secret.ToByteArray(), AdditionalEntropy, DataProtectionScope.CurrentUser);
-            return bytes.GetString();
+            var bytesUnprotected = Encoding.GetBytes(secret);
+            var bytesProtected = ProtectedData.Protect(bytesUnprotected, AdditionalEntropy, DataProtectionScope.CurrentUser);
+            var protectedBase64 = Convert.ToBase64String(bytesProtected);
+            return protectedBase64;
         }
 
         public static string Unprotect(this string encryptedSecret)
         {
-            var bytes = ProtectedData.Unprotect(
-                encryptedSecret.ToByteArray(), 
+            var bytesProtected = Convert.FromBase64String(encryptedSecret);
+            var bytesUnprotected = ProtectedData.Unprotect(
+                bytesProtected, 
                 AdditionalEntropy, 
                 DataProtectionScope.CurrentUser);
-            return bytes.GetString();
+
+            var unprotectedString = Encoding.GetString(bytesUnprotected);
+
+            return unprotectedString;
         }
 
         public static string Protect(this SecureString value)
@@ -45,24 +54,6 @@
             }
         }
 
-        #endregion
-
-        #region Methods
-
-        private static string GetString(this byte[] bytes)
-        {
-            char[] chars = new char[bytes.Length / sizeof(char)];
-            System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
-            return new string(chars);
-        }
-
-        private static byte[] ToByteArray(this string str)
-        {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
-        }
-
-        #endregion
+        #endregion        
     }
 }

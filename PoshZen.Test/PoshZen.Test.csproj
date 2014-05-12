@@ -106,7 +106,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="End2End\Cmdlets\SetZendeskCredentialsCmdletTests.cs" />
     <Compile Include="End2End\Cmdlets\Tickets\TicketTests.cs" />
+    <Compile Include="End2End\ContainerTests.cs" />
     <Compile Include="TestHelpers.cs" />
     <Compile Include="Unit\Cmdlets\SetZendeskCredentialsCmdletTests.cs" />
     <Compile Include="Unit\ContainerFixture.cs" />
