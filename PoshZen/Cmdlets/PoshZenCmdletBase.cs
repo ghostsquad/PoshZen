@@ -1,10 +1,10 @@
-﻿namespace PoshZen
-{   
+﻿namespace PoshZen.Cmdlets
+{
     using System.Management.Automation;
 
     using PoshZen.Exceptions;
 
-    using SharpZendeskApi;    
+    using SharpZendeskApi;
     using SharpZendeskApi.Management;
     using SharpZendeskApi.Models;
 

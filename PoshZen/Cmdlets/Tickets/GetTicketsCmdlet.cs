@@ -1,20 +1,18 @@
-﻿namespace PoshZen
+﻿namespace PoshZen.Cmdlets.Tickets
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Management.Automation;
 
     using SharpZendeskApi;
     using SharpZendeskApi.Management;
     using SharpZendeskApi.Models;
 
-    [Cmdlet(VerbsCommon.Get, "Tickets", DefaultParameterSetName = ParamSetIdList)]
+    [Cmdlet(VerbsCommon.Get, CmdletNamingConstants.Tickets, DefaultParameterSetName = ParamSetDefault)]
     public class GetTicketsCmdlet : PoshZenCmdletBase<ITicket>
     {
         #region Constants
 
-        private const string ParamSetIdList = "IdList";
+        private const string ParamSetDefault = "default";
 
         private const string ParamSetView = "View";
 
@@ -22,25 +20,23 @@
         
         #endregion
 
-        #region Fields       
-
-        #endregion
-
         #region Public Properties
 
-        [Parameter(Position = 1)]
+        [Parameter(Position = 1, ParameterSetName = ParamSetDefault)]
+        [Parameter(Position = 1, ParameterSetName = ParamSetView)]
+        [Parameter(Position = 1, ParameterSetName = ParamSetViewId)]
         [ValidateNotNull]
         public override IZendeskClient Client { get; set; }
 
-        [Parameter(Position = 0, ParameterSetName = ParamSetIdList)]
+        [Parameter(Position = 0, ParameterSetName = ParamSetDefault, Mandatory = true)]
         [ValidateNotNullOrEmpty]
         public int[] Ids { get; set; }
 
-        [Parameter(Position = 0, ParameterSetName = ParamSetView)]
+        [Parameter(Position = 0, ParameterSetName = ParamSetView, Mandatory = true)]
         [ValidateNotNull]
         public View View { get; set; }
 
-        [Parameter(Position = 0, ParameterSetName = ParamSetViewId)]
+        [Parameter(Position = 0, ParameterSetName = ParamSetViewId, Mandatory = true)]
         [ValidateNotNull]
         public int ViewId { get; set; }
 
@@ -59,8 +55,8 @@
             var managerAsTicketManager = this.Manager as TicketManager;            
 
             switch (this.ParameterSetName)
-            {                   
-                case ParamSetIdList:
+            {
+                case ParamSetDefault:
                     {
                         tickets = this.Manager.GetMany(this.Ids);
                         break;

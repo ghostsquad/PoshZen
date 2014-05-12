@@ -1,4 +1,4 @@
-﻿namespace PoshZen.Test
+﻿namespace PoshZen.Test.Unit.Cmdlets.Tickets
 {
     using System;
 
@@ -13,7 +13,7 @@
 
     using SharpZendeskApi;
     using SharpZendeskApi.Management;
-    using SharpZendeskApi.Models;   
+    using SharpZendeskApi.Models;
 
     using Xunit;
 
@@ -44,9 +44,10 @@
             var poshZenContainer = PoshZenContainer.Create(this.environmentMock.Object, this.container);
             poshZenContainer.Client = Mock.Of<IZendeskClient>();
 
-            var invocationData = Invoke("Get-Ticket 1");
+            var invocationData = this.Invoke("Get-Ticket 1");
 
             invocationData.Results.Should().HaveCount(1);
+            invocationData.ErrorRecords.Should().HaveCount(0);
             invocationData.Results[0].BaseObject.Should().Be(expectedTicket);
         }
     }

@@ -1,5 +1,8 @@
 ﻿namespace PoshZen
 {
+    using System;
+    using System.Runtime.InteropServices;
+    using System.Security;
     using System.Security.Cryptography;
 
     // http://msdn.microsoft.com/en-us/library/system.security.cryptography.protecteddata.aspx
@@ -26,6 +29,20 @@
                 AdditionalEntropy, 
                 DataProtectionScope.CurrentUser);
             return bytes.GetString();
+        }
+
+        public static string Protect(this SecureString value)
+        {
+            IntPtr valuePtr = IntPtr.Zero;
+            try
+            {
+                valuePtr = Marshal.SecureStringToGlobalAllocUnicode(value);
+                return Protect(Marshal.PtrToStringUni(valuePtr));
+            }
+            finally
+            {
+                Marshal.ZeroFreeGlobalAllocUnicode(valuePtr);
+            }
         }
 
         #endregion

@@ -1,4 +1,4 @@
-namespace PoshZen.Test
+namespace PoshZen.Test.Unit
 {
     using System;
     using System.IO;

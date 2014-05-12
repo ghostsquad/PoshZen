@@ -1,19 +1,22 @@
-﻿namespace PoshZen
+﻿namespace PoshZen.Cmdlets.Tickets
 {
     using System.Management.Automation;
 
     using SharpZendeskApi;
     using SharpZendeskApi.Models;
 
-    [Cmdlet(VerbsCommon.Get, "Ticket")]
+    [Cmdlet(VerbsCommon.Get, CmdletNamingConstants.Ticket, DefaultParameterSetName = ParamSetFromId)]
     public class GetTicketCmdlet : PoshZenCmdletBase<ITicket>
-    {        
+    {
+        private const string ParamSetFromId = "FromId";
+
         #region Public Properties
 
         [Parameter(Position = 1, ValueFromPipeline = true)]
         public override IZendeskClient Client { get; set; }
 
-        [Parameter(Position = 0)]
+        [Parameter(Position = 0, Mandatory = true)]      
+        [ValidateNotNull]
         public int Id { get; set; }
 
         #endregion
@@ -26,7 +29,7 @@
         }
 
         protected override void ProcessRecord()
-        {
+        {            
             this.WriteObject(this.Manager.Get(this.Id));
         }
 

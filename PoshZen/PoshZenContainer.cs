@@ -85,7 +85,7 @@
                 }
 
                 var container = new UnityContainer();
-                container.RegisterType(typeof(TicketManager));
+                container.RegisterType<IManager<ITicket>, TicketManager>();
 
                 Create(WindowsEnvironment.Default, container);
 
@@ -136,18 +136,8 @@
         /// </returns>
         public static PoshZenContainer Create(IEnvironment environment, IUnityContainer container)
         {
-            if (instance != null)
-            {
-                return instance;
-            }
-
             lock (syncRoot)
             {
-                if (instance != null)
-                {
-                    return instance;
-                }
-
                 instance = new PoshZenContainer(environment, container);
             }
 
@@ -200,12 +190,6 @@
                     new ResolverOverride[] { new ParameterOverride("client", client) });
         }
 
-        /// <summary>
-        /// The write json settings.
-        /// </summary>
-        /// <param name="settings">
-        /// The settings.
-        /// </param>
         public void WriteJsonSettings(ClientSettings settings)
         {
             this.Settings = settings;

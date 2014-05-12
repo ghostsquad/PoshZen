@@ -43,13 +43,13 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="RestSharp">
-      <HintPath>..\packages\SharpZendeskApi.0.1.2.0\lib\net45\RestSharp.dll</HintPath>
+      <HintPath>..\packages\SharpZendeskApi.0.1.2.0-alpha\lib\net45\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="SharpZendeskApi">
-      <HintPath>..\packages\SharpZendeskApi.0.1.2.0\lib\net45\SharpZendeskApi.dll</HintPath>
+      <HintPath>..\packages\SharpZendeskApi.0.1.2.0-alpha\lib\net45\SharpZendeskApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
@@ -66,19 +66,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CmdletNamingConstants.cs" />
+    <Compile Include="Cmdlets\SetZendeskCredentialsCmdlet.cs" />
     <Compile Include="DataProtectionExtensions.cs" />
     <Compile Include="Exceptions\PoshZenCorruptSettingsException.cs" />
     <Compile Include="Exceptions\PoshZenException.cs" />
+    <Compile Include="Cmdlets\Tickets\NewTicketCmdlet.cs" />
     <Compile Include="WindowsEnvironment.cs" />
     <Compile Include="ClientSettings.cs" />
     <Compile Include="IEnvironment.cs" />
-    <Compile Include="PoshZenCmdletBase.cs" />
+    <Compile Include="Cmdlets\PoshZenCmdletBase.cs" />
     <Compile Include="PoshZenContainer.cs" />
-    <Compile Include="GetTicketCmdlet.cs" />
-    <Compile Include="GetTicketsCmdlet.cs" />
-    <Compile Include="PoshZenPSSnapIn.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Cmdlets\Tickets\GetTicketCmdlet.cs" />
+    <Compile Include="Cmdlets\Tickets\GetTicketsCmdlet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
