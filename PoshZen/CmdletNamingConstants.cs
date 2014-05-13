@@ -9,5 +9,9 @@
         public const string ZendeskClient = "ZendeskClient";
 
         public const string ZendeskCredentials = "ZendeskCredentials";
+
+        public const string View = "View";
+
+        public const string Views = "Views";
     }
 }

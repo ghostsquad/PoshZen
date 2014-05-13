@@ -85,7 +85,16 @@
                 }
 
                 var container = new UnityContainer();
+
+                // models
+                container.RegisterType<ITicket, Ticket>();
+                container.RegisterType<IView, View>();               
+
+                // managers
                 container.RegisterType<IManager<ITicket>, TicketManager>();
+                container.RegisterType<IManager<IView>, ViewManager>();
+
+                // pages
 
                 Create(WindowsEnvironment.Default, container);
 

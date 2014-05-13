@@ -36,6 +36,7 @@ namespace PoshZen.Test.End2End
             }
 
             var settings = this.fixture.Create<ClientSettings>();
+            settings.Domain = "https://my.test.domain";
             settings.ZendeskUser = settings.ZendeskUser.Protect();
             settings.ZendeskSecret = settings.ZendeskSecret.Protect();
             var serialized = JsonConvert.SerializeObject(settings);
