@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="0" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2014-05-05" time="16:05:57">
+	<environment nunit-version="2.5.8.0" clr-version="2.0.50727.1433" os-version="6.1.7601" platform="Microsoft Windows 7 Enterprise |C:\windows|\Device\Harddisk0\Partition2" cwd="C:\dev\personal\PoshZen\PoshZen.Test" machine-name="SEAW328992" user="WMcNamee" user-domain="INTERNAL" /> <culture-info current-culture="en-US" current-uiculture="en-US" />
+	
+</test-results>

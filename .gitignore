@@ -5,6 +5,10 @@
 *.suo
 *.user
 *.sln.docstates
+*.sln.DotSettings
+
+# Nuget packages
+packages/*/
 
 # Build results
 
@@ -14,6 +18,10 @@ x64/
 build/
 [Bb]in/
 [Oo]bj/
+
+# Backup
+[Bb]ackup/
+*.bak
 
 # Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
 !packages/*/build/
@@ -65,6 +73,9 @@ ipch/
 # ReSharper is a .NET coding add-in
 _ReSharper*/
 *.[Rr]e[Ss]harper
+
+# Stylecop Cache
+StyleCop.Cache
 
 # TeamCity is a build add-in
 _TeamCity*
