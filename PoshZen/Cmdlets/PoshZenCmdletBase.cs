@@ -8,14 +8,15 @@
     using SharpZendeskApi.Management;
     using SharpZendeskApi.Models;
 
-    public abstract class PoshZenCmdletBase<TInterface> : PSCmdlet
-        where TInterface : IZendeskThing, ITrackable
+    public abstract class PoshZenCmdletBase<TInterface, TManager> : PSCmdlet        
+        where TInterface : class, ITrackable        
+        where TManager : class, IManager<TInterface>
     {
         #region Public Properties
 
-        public abstract IZendeskClient Client { get; set; }
+        public abstract ZendeskClientBase Client { get; set; }
 
-        protected IManager<TInterface> Manager { get; set; }
+        protected TManager Manager { get; set; }
 
         #endregion
 
@@ -24,7 +25,7 @@
         internal void ResolveManager()
         {
             this.ResolveClient();
-            this.Manager = PoshZenContainer.Default.ResolveManager<TInterface>(this.Client);
+            this.Manager = PoshZenContainer.Default.ResolveManager<TManager, TInterface>(this.Client);
         }
 
         protected void ResolveClient()

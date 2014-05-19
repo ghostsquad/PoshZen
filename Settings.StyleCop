@@ -37,6 +37,7 @@
         <StringProperty Name="AdvancedNaming_ProtectedConst">$(AaBb)</StringProperty>
         <StringProperty Name="AdvancedNaming_PrivateConst">$(AaBb)</StringProperty>
         <StringProperty Name="AdvancedNaming_InternalConst">$(AaBb)</StringProperty>
+        <StringProperty Name="AdvancedNaming_LocalConstant">$(AaBb)</StringProperty>
       </AnalyzerSettings>
     </Analyzer>
     <Analyzer AnalyzerId="StyleCop.CSharp.NamingRules">

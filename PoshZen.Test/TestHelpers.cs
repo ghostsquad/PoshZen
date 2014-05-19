@@ -18,7 +18,7 @@
 
         public const string CredentialUserNameExample = "emailaddress@@http://mydomain.zendesk.com/api/v2";
 
-        public static IZendeskClient GetClient(
+        public static ZendeskClientBase GetClient(
             ZendeskAuthenticationMethod authenticationMethod,
             bool useGoodPasswordToken = true)
         {

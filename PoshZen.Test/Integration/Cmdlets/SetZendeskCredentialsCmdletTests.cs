@@ -18,13 +18,13 @@
         public void GivenCredsExpectJsonFilePopulated()
         {
             // arrange
-            var ExpectedFilePath = Path.Combine(
+            var expectedFilePath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "PoshZen/RegisteredAccounts.json");
 
-            if (File.Exists(ExpectedFilePath))
+            if (File.Exists(expectedFilePath))
             {
-                File.Delete(ExpectedFilePath);
+                File.Delete(expectedFilePath);
             }            
 
             const string ExpectedDomain = "domain123";
@@ -38,11 +38,11 @@
             cmd.AddParameter("Password", ExpectedPassword);            
 
             // act           
-            var results = this.Invoke(cmd);
+            this.Invoke(cmd);
 
             // assert
-            File.Exists(ExpectedFilePath).Should().BeTrue();
-            var contents = File.ReadAllText(ExpectedFilePath);
+            File.Exists(expectedFilePath).Should().BeTrue();
+            var contents = File.ReadAllText(expectedFilePath);
 
             var settings = JsonConvert.DeserializeObject<ClientSettings>(contents);
             settings.ZendeskUser.Unprotect().Should().Be(ExpectedUsername);

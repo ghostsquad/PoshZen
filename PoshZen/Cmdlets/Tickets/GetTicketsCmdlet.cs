@@ -8,7 +8,7 @@
     using SharpZendeskApi.Models;
 
     [Cmdlet(VerbsCommon.Get, CmdletNamingConstants.Tickets, DefaultParameterSetName = ParamSetDefault)]
-    public class GetTicketsCmdlet : PoshZenCmdletBase<ITicket>
+    public class GetTicketsCmdlet : PoshZenCmdletBase<ITicket, ITicketManager>
     {
         #region Constants
 
@@ -26,7 +26,7 @@
         [Parameter(Position = 1, ParameterSetName = ParamSetView)]
         [Parameter(Position = 1, ParameterSetName = ParamSetViewId)]
         [ValidateNotNull]
-        public override IZendeskClient Client { get; set; }
+        public override ZendeskClientBase Client { get; set; }
 
         [Parameter(Position = 0, ParameterSetName = ParamSetDefault, Mandatory = true)]
         [ValidateNotNullOrEmpty]
@@ -51,8 +51,7 @@
 
         protected override void ProcessRecord()
         {
-            IEnumerable<ITicket> tickets = null;
-            var managerAsTicketManager = this.Manager as TicketManager;            
+            IEnumerable<ITicket> tickets = null;          
 
             switch (this.ParameterSetName)
             {
@@ -62,15 +61,15 @@
                         break;
                     }
 
-                case ParamSetView:
+                case ParamSetViewId:
                     {
-                        tickets = managerAsTicketManager.FromView(this.ViewId);
+                        tickets = this.Manager.FromView(this.ViewId);
                         break;
                     }
 
-                case ParamSetViewId:
+                case ParamSetView:
                     {
-                        tickets = managerAsTicketManager.FromView(this.View);
+                        tickets = this.Manager.FromView(this.View.Id.Value);
                         break;
                     }
             }

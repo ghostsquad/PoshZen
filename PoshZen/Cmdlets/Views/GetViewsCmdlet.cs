@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PoshZen.Cmdlets.View
+﻿namespace PoshZen.Cmdlets.Views
 {
+    using System.Collections.Generic;
     using System.Management.Automation;
 
     using SharpZendeskApi;
@@ -13,7 +8,7 @@ namespace PoshZen.Cmdlets.View
     using SharpZendeskApi.Models;
 
     [Cmdlet(VerbsCommon.Get, CmdletNamingConstants.Views, DefaultParameterSetName = ParamSetDefault)]
-    public class GetViewsCmdlet : PoshZenCmdletBase<IView>
+    public class GetViewsCmdlet : PoshZenCmdletBase<IView, ViewManager>
     {
         private const string ParamSetDefault = "default";
 
@@ -21,7 +16,7 @@ namespace PoshZen.Cmdlets.View
 
         [Parameter(ValueFromPipeline = true, ParameterSetName = ParamSetDefault)]
         [Parameter(ValueFromPipeline = true, ParameterSetName = ParamSetActive)]
-        public override IZendeskClient Client { get; set; }
+        public override ZendeskClientBase Client { get; set; }
 
         [Parameter(ParameterSetName = ParamSetDefault)]
         public SwitchParameter Full { get; set; }
@@ -31,24 +26,23 @@ namespace PoshZen.Cmdlets.View
 
         protected override void BeginProcessing()
         {
-            this.ResolveClient();
+            this.ResolveManager();
         }
 
         protected override void ProcessRecord()
         {
-            IEnumerable<IView> views = null;
-            var viewManager = PoshZenContainer.Default.ResolveManager<IView>(this.Client) as ViewManager;            
+            IEnumerable<IView> views = null;            
 
             switch (this.ParameterSetName)
             {
                 case ParamSetDefault:
                     {
-                        views = viewManager.GetAvailableViews(this.Full);
+                        views = this.Manager.GetAvailableViews(this.Full);
                         break;
                     }
                 case ParamSetActive:
                     {
-                        views = viewManager.GetActiveViews();
+                        views = this.Manager.GetActiveViews();
                         break;
                     }
             }

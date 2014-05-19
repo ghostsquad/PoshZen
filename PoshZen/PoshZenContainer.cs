@@ -91,11 +91,9 @@
                 container.RegisterType<IView, View>();               
 
                 // managers
-                container.RegisterType<IManager<ITicket>, TicketManager>();
-                container.RegisterType<IManager<IView>, ViewManager>();
-
-                // pages
-
+                container.RegisterType<ITicketManager, TicketManager>();
+                container.RegisterType<IViewManager, ViewManager>();
+                
                 Create(WindowsEnvironment.Default, container);
 
                 return instance;
@@ -105,7 +103,7 @@
         /// <summary>
         /// Gets or sets the client.
         /// </summary>
-        public IZendeskClient Client { get; set; }
+        public ZendeskClientBase Client { get; set; }
 
         /// <summary>
         /// Gets the container.
@@ -159,7 +157,7 @@
         /// <returns>
         /// The <see cref="IZendeskClient"/>.
         /// </returns>
-        public IZendeskClient ResolveClient()
+        public ZendeskClientBase ResolveClient()
         {
             if (this.Client != null)
             {
@@ -180,22 +178,12 @@
                     this.Settings.CredentialType);
         }
 
-        /// <summary>
-        /// The resolve manager.
-        /// </summary>
-        /// <param name="client">
-        /// The client.
-        /// </param>
-        /// <typeparam name="TInterface">
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="IManager"/>.
-        /// </returns>
-        public IManager<TInterface> ResolveManager<TInterface>(IZendeskClient client)
-            where TInterface : IZendeskThing, ITrackable
+        public TManager ResolveManager<TManager, TInterface>(ZendeskClientBase client)
+            where TInterface : class, ITrackable
+            where TManager : class, IManager<TInterface>
         {
             return
-                this.Container.Resolve<IManager<TInterface>>(
+                this.Container.Resolve<TManager>(
                     new ResolverOverride[] { new ParameterOverride("client", client) });
         }
 
