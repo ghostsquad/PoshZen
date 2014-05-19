@@ -98,7 +98,7 @@
     <None Include="PoshZen.TypeExtensions.ps1xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>  
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -108,13 +108,13 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <Target Name="CreateReleaseZip" AfterTargets="Build">
-	<PropertyGroup>
-		<PowerShellExe Condition=" '$(PowerShellExe)'=='' "> %WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
-		<ScriptLocation Condition=" '$(ScriptLocation)'=='' ">$(SolutionDir)\tools\zipforrelease.ps1</ScriptLocation>		
-		<ZipExeLocation Condition=" '$(ZipExeLocation)'=='' ">$(PROGRAMFILES)\7-Zip\7z.exe</ZipExeLocation>
-		<ReleaseLocation Condition=" '$(ReleaseLocation)'=='' ">$(MSBuildProjectDirectory)\..\release</ReleaseLocation>		
-	</PropertyGroup>
-	<Exec Command="$(PowerShellExe) -NonInteractive -executionpolicy unrestricted -command &quot;&amp; { &amp;&apos;$(ScriptLocation)&apos; &apos;$(ZipExeLocation)&apos; &apos;$(ReleaseLocation)&apos; &apos;$(MSBuildProjectDirectory)&apos;} &quot;" />
+    <PropertyGroup>
+      <PowerShellExe Condition=" '$(PowerShellExe)'=='' "> %WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
+      <ScriptLocation Condition=" '$(ScriptLocation)'=='' ">$(SolutionDir)\tools\zipforrelease.ps1</ScriptLocation>
+      <ZipExeLocation Condition=" '$(ZipExeLocation)'=='' ">$(PROGRAMFILES)\7-Zip\7z.exe</ZipExeLocation>
+      <ReleaseLocation Condition=" '$(ReleaseLocation)'=='' ">$(MSBuildProjectDirectory)\..\release</ReleaseLocation>
+    </PropertyGroup>
+    <Exec Command="$(PowerShellExe) -NonInteractive -executionpolicy unrestricted -command &quot;&amp; { &amp;'$(ScriptLocation)' '$(ZipExeLocation)' '$(ReleaseLocation)' '$(MSBuildProjectDirectory)'} &quot;" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
