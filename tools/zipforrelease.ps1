@@ -7,6 +7,7 @@ param
 
 trap
 {
+	throw $_
 	EXIT 1
 }
 
@@ -15,9 +16,11 @@ $ErrorActionPreference = "Stop"
 $datetime = [DateTime]::Now.ToUniversalTime().ToString("yyyy-MM-ddTHH-mm-ss") 
 $zipfilename = $datetime + ".zip"
 $zipfilepath = Join-Path $releaseDir $zipfilename
+$sourceLocation = Join-Path $projectDir "bin\debug\*"
 
-remove-item $(Join-Path $releaseDir "*")
+new-item $releaseDir -itemType Directory -force
+gci $releaseDir | %{remove-item $_.fullname -force}
 
-& $zipExe a $zipfilepath $sourceLocation *.*
+& $zipExe a $zipfilepath $sourceLocation
 
 EXIT 0
