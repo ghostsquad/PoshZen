@@ -108,13 +108,16 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <Target Name="CreateReleaseZip" AfterTargets="Build">
+	<GetAssemblyIdentity AssemblyFiles="bin\debug\PoshZen.dll">
+		<Output TaskParameter="Assemblies" ItemName="PoshZenAssemblyInfo"/>
+	</GetAssemblyIdentity>
     <PropertyGroup>
       <PowerShellExe Condition=" '$(PowerShellExe)'=='' "> %WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
       <ScriptLocation Condition=" '$(ScriptLocation)'=='' ">$(SolutionDir)\tools\zipforrelease.ps1</ScriptLocation>
       <ZipExeLocation Condition=" '$(ZipExeLocation)'=='' ">$(PROGRAMFILES)\7-Zip\7z.exe</ZipExeLocation>
       <ReleaseLocation Condition=" '$(ReleaseLocation)'=='' ">$(MSBuildProjectDirectory)\..\release</ReleaseLocation>
     </PropertyGroup>
-    <Exec Command="$(PowerShellExe) -NonInteractive -executionpolicy unrestricted -command &quot;&amp; { &amp;'$(ScriptLocation)' '$(ZipExeLocation)' '$(ReleaseLocation)' '$(MSBuildProjectDirectory)'} &quot;" />
+    <Exec Command="$(PowerShellExe) -NonInteractive -executionpolicy unrestricted -command &quot;&amp; { &amp;'$(ScriptLocation)' '$(ZipExeLocation)' '$(ReleaseLocation)' '$(MSBuildProjectDirectory)' '%(PoshZenAssemblyInfo.Version)'} &quot;" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
