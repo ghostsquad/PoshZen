@@ -18,13 +18,7 @@
     using Xunit;
 
     public class GetTicketCmdletTests : ScriptCsCmdletTestBase
-    {
-        private readonly Mock<IEnvironment> environmentMock = new Mock<IEnvironment>();
-
-        private readonly IUnityContainer container = new UnityContainer();
-
-        private readonly IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
-
+    {        
         public GetTicketCmdletTests()
         {
             this.environmentMock.Setup(x => x.ApplicationDataFolder).Returns(AppDomain.CurrentDomain.BaseDirectory);
@@ -41,11 +35,7 @@
                 .Returns(expectedTicket)
                 .Callback<int>(x => actualId = x);
 
-            this.container.RegisterType<ITicket, Ticket>();
-            this.container.RegisterInstance(managerMock.Object);
-
-            var poshZenContainer = PoshZenContainer.Create(this.environmentMock.Object, this.container);
-            poshZenContainer.Client = Mock.Of<ZendeskClientBase>();
+            this.Glue(managerMock);
 
             var invocationData = this.Invoke("Get-Ticket 1");
 

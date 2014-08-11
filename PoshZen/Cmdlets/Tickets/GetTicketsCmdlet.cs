@@ -22,9 +22,9 @@
 
         #region Public Properties
 
-        [Parameter(Position = 1, ParameterSetName = ParamSetDefault)]
-        [Parameter(Position = 1, ParameterSetName = ParamSetView)]
-        [Parameter(Position = 1, ParameterSetName = ParamSetViewId)]
+        [Parameter(Position = 2, ParameterSetName = ParamSetDefault)]
+        [Parameter(Position = 2, ParameterSetName = ParamSetView)]
+        [Parameter(Position = 2, ParameterSetName = ParamSetViewId)]
         [ValidateNotNull]
         public override ZendeskClientBase Client { get; set; }
 
@@ -39,6 +39,11 @@
         [Parameter(Position = 0, ParameterSetName = ParamSetViewId, Mandatory = true)]
         [ValidateNotNull]
         public int ViewId { get; set; }
+
+        [Parameter(Position = 1, ParameterSetName = ParamSetDefault)]
+        [Parameter(Position = 1, ParameterSetName = ParamSetView)]
+        [Parameter(Position = 1, ParameterSetName = ParamSetViewId)]
+        public SwitchParameter Page { get; set; }
 
         #endregion
 
