@@ -20,17 +20,14 @@ using SharpZendeskApi.Models;
 using Xunit.Should;
 
 namespace PoshZen.Test.Unit.Cmdlets.Tickets {
+    using Xunit;
+
     public class GetTicketsCmdletTests : ScriptCsCmdletTestBase {
-        private readonly Mock<IEnvironment> environmentMock = new Mock<IEnvironment>();
-
-        private readonly IUnityContainer container = new UnityContainer();
-
-        private readonly IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
-
         public GetTicketsCmdletTests() {
             this.environmentMock.Setup(x => x.ApplicationDataFolder).Returns(AppDomain.CurrentDomain.BaseDirectory);
         }
 
+        [Fact]
         public void GivenViewIdExpectIdPassedToTicketManager() {
             const int ExpectedViewId = 1;
 
@@ -38,12 +35,15 @@ namespace PoshZen.Test.Unit.Cmdlets.Tickets {
             var managerMock = new Mock<ITicketManager>();
             managerMock.Setup(x => x.FromView(It.IsAny<int>())).Callback<int>(x => actualViewId = x);
 
+            this.Glue(managerMock);
+
             var invocationData = this.Invoke("Get-Tickets -ViewId " + ExpectedViewId);
 
             invocationData.ErrorRecords.Should().BeEmpty();
             actualViewId.Should().Be(ExpectedViewId);
         }
 
+        [Fact]
         public void CanGetAllTickets() {
             const int ExpectedTicketCount = 2;
             var expectedTickets = this.fixture.CreateMany<ITicket>(ExpectedTicketCount).ToList();
@@ -63,21 +63,6 @@ namespace PoshZen.Test.Unit.Cmdlets.Tickets {
             for (var i = 0; i < invocationData.Results.Count; i++) {
                 invocationData.Results[i].BaseObject.Should().Be(expectedTickets[i]);
             }
-        }
-
-        public void CanPageThroughTickets() {
-            const int ExpectedTicketCount = 2;
-            var expectedTickets = this.fixture.CreateMany<ITicket>(ExpectedTicketCount).ToList();
-
-            var listingMock = new Mock<IListing<ITicket>>();
-            listingMock.Setup(x => x.GetEnumerator()).Returns(expectedTickets.GetEnumerator());
-
-            var managerMock = new Mock<ITicketManager>();
-            managerMock.Setup(x => x.FromView(It.IsAny<int>())).Returns(listingMock.Object);
-
-            this.Glue(managerMock);
-
-            var invocationData = this.Invoke("Get-Tickets -ViewId 1");
-        }
+        }        
     }
 }
