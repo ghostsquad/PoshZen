@@ -108,9 +108,9 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <Target Name="CreateReleaseZip" AfterTargets="Build">
-	<GetAssemblyIdentity AssemblyFiles="bin\debug\PoshZen.dll">
-		<Output TaskParameter="Assemblies" ItemName="PoshZenAssemblyInfo"/>
-	</GetAssemblyIdentity>
+    <GetAssemblyIdentity AssemblyFiles="bin\debug\PoshZen.dll">
+      <Output TaskParameter="Assemblies" ItemName="PoshZenAssemblyInfo" />
+    </GetAssemblyIdentity>
     <PropertyGroup>
       <PowerShellExe Condition=" '$(PowerShellExe)'=='' "> %WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe</PowerShellExe>
       <ScriptLocation Condition=" '$(ScriptLocation)'=='' ">$(SolutionDir)\tools\zipforrelease.ps1</ScriptLocation>

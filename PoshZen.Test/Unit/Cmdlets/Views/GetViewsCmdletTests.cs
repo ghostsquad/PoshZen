@@ -23,12 +23,6 @@
 
     public class GetViewsCmdletTests : ScriptCsCmdletTestBase
     {
-        private readonly Mock<IEnvironment> environmentMock = new Mock<IEnvironment>();
-
-        private readonly IUnityContainer container = new UnityContainer();
-
-        private readonly IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
-
         public GetViewsCmdletTests()
         {            
             this.environmentMock.Setup(x => x.ApplicationDataFolder).Returns(AppDomain.CurrentDomain.BaseDirectory);
