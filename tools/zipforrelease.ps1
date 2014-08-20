@@ -2,7 +2,7 @@ param
 (
     [string]$zipExe = $(throw "Please provide path to 7z.exe"),
     [string]$releaseDir = $(throw "Please provide path to release folder"),
-    [string]$projectDir = $(throw "Please provide path to project root folder")
+    [string]$projectDir = $(throw "Please provide path to project root folder"),
     [string]$version = $(throw "please provide version")
 )
 
