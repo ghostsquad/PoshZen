@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="CmdletNamingConstants.cs" />
     <Compile Include="Cmdlets\SetZendeskCredentialsCmdlet.cs" />
+    <Compile Include="Cmdlets\Tickets\UpdateTicketCmdlet.cs" />
     <Compile Include="Cmdlets\Views\GetViewsCmdlet.cs" />
     <Compile Include="DataProtectionExtensions.cs" />
     <Compile Include="Exceptions\PoshZenCorruptSettingsException.cs" />

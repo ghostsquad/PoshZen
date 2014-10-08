@@ -118,6 +118,7 @@
     <Compile Include="Unit\Cmdlets\CmdletTestBase.cs" />
     <Compile Include="Unit\Cmdlets\SetZendeskCredentialsCmdletTests.cs" />
     <Compile Include="Unit\Cmdlets\Tickets\GetTicketsCmdletTests.cs" />
+    <Compile Include="Unit\Cmdlets\Tickets\UpdateTicketCmdletTests.cs" />
     <Compile Include="Unit\Cmdlets\Tickets\NewTicketCmdletTests.cs" />
     <Compile Include="Unit\Cmdlets\Views\GetViewsCmdletTests.cs" />
     <Compile Include="Unit\ContainerFixture.cs" />
